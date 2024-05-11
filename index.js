@@ -50,6 +50,20 @@ app.get('/assignment/api/get',async(req,res)=>{
     console.log(result);
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     await client.db("admin").command({ ping: 1 });
     console.log("successfully connected to MongoDB!");
   } finally {
@@ -57,10 +71,6 @@ app.get('/assignment/api/get',async(req,res)=>{
   }
 }
 run().catch(console.dir);
-
-
-
-
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

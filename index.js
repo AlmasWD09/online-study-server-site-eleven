@@ -54,16 +54,6 @@ app.get('/assignment/api/get',async(req,res)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
     await client.db("admin").command({ ping: 1 });
     console.log("successfully connected to MongoDB!");
   } finally {

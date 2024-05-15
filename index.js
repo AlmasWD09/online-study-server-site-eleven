@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors')
 require('dotenv').config()
 const port = process.env.PORT || 5000
@@ -11,8 +11,7 @@ app.use(
     cors({
       origin: [
         "http://localhost:5173",
-        // "https://cardoctor-bd.web.app",
-        // "https://cardoctor-bd.firebaseapp.com",
+        "https://online-study-assignments.web.app"
       ],
       credentials: true,
     })
@@ -45,10 +44,57 @@ app.post('/assignment/api/create',async(req,res)=>{
 })
 
 app.get('/assignment/api/get',async(req,res)=>{
-    const result = await assignmentCollection.find().toArray()
+  const page = parseInt(req.query.page)
+  const size = parseInt(req.query.size)-1
+  const filter = req.query.filterData;
+  let query = {};
+  if (filter) {
+    query = { level: { $regex: new RegExp(filter, 'i') } };
+  }
+
+    // const result = await assignmentCollection.find(query).skip(page * size).limit(size).toArray()
+    const result = await assignmentCollection.find(query).toArray()
     res.send(result)
-    console.log(result);
 })
+
+app.get('/assignment/api/get-count',async(req,res)=>{
+  const filter = req.query.filterData;
+  let query = {};
+  if (filter) {
+    query = { difficulty: { $regex: new RegExp(filter, 'i') } };
+    // query = { level: { $regex: new RegExp(filter, 'i') } };
+  }
+    const count = await assignmentCollection.countDocuments(query)
+    res.send({count})
+  
+})
+
+
+
+app.get('/assignment/api/get/:id',async(req,res)=>{
+  const singleDataGet = req.params.id
+  const query = {_id: new ObjectId(singleDataGet)}
+  const result = await assignmentCollection.findOne(query)
+  res.send(result)
+})
+
+app.get('/assignment/api/get/user/:email',async(req,res)=>{
+  const getEmail = req.params.email
+  const query = {userEmail:getEmail}
+  const result = await assignmentCollection.find(query).toArray()
+  res.send(result)
+})
+
+
+
+
+
+
+
+
+
+
+
 
 
 

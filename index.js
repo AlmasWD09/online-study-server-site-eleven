@@ -51,7 +51,6 @@ app.get('/assignment/api/get',async(req,res)=>{
   if (filter) {
     query = { level: { $regex: new RegExp(filter, 'i') } };
   }
-
     // const result = await assignmentCollection.find(query).skip(page * size).limit(size).toArray()
     const result = await assignmentCollection.find(query).toArray()
     res.send(result)
@@ -70,7 +69,6 @@ app.get('/assignment/api/get-count',async(req,res)=>{
 })
 
 
-
 app.get('/assignment/api/get/:id',async(req,res)=>{
   const singleDataGet = req.params.id
   const query = {_id: new ObjectId(singleDataGet)}
@@ -87,10 +85,20 @@ app.get('/assignment/api/get/user/:email',async(req,res)=>{
 
 
 
+app.put('/assignment/api/update/:id',async(req,res)=>{
+  const id = req.params.id
+  const filter = {_id: new ObjectId(id)}
+  const updateData = req.body
+  const options = { upsert: true };
 
-
-
-
+  const assignment = {
+    $set: {
+      ...updateData
+    },
+  };
+  const result = await assignmentCollection.updateOne(filter,assignment,options)
+  res.send(result)
+})
 
 
 

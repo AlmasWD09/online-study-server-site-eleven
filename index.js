@@ -106,14 +106,6 @@ app.put('/assignment/api/update/:id',async(req,res)=>{
   res.send(result)
 })
 
-
-
-
-
-
-
-
-
     await client.db("admin").command({ ping: 1 });
     console.log("successfully connected to MongoDB!");
   } finally {

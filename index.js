@@ -44,15 +44,14 @@ app.post('/assignment/api/create',async(req,res)=>{
 })
 
 app.get('/assignment/api/get',async(req,res)=>{
-  const page = parseInt(req.query.page)
+  const page = parseInt(req.query.page)-1
   const size = parseInt(req.query.size)-1
   const filter = req.query.filterData;
   let query = {};
   if (filter) {
     query = { level: { $regex: new RegExp(filter, 'i') } };
   }
-    // const result = await assignmentCollection.find(query).skip(page * size).limit(size).toArray()
-    const result = await assignmentCollection.find(query).toArray()
+    const result = await assignmentCollection.find(query).skip(page * size).limit(size).toArray()
     res.send(result)
 })
 
@@ -61,7 +60,6 @@ app.get('/assignment/api/get-count',async(req,res)=>{
   let query = {};
   if (filter) {
     query = { difficulty: { $regex: new RegExp(filter, 'i') } };
-    // query = { level: { $regex: new RegExp(filter, 'i') } };
   }
     const count = await assignmentCollection.countDocuments(query)
     res.send({count})
